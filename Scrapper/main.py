@@ -24,9 +24,10 @@ def task(year,month):
     delta = end_date - start_date
 
     chrome_options = webdriver.ChromeOptions()
+    chrome_options.headless=True
     #prefs = {"profile.managed_default_content_settings.images": 2}
     #chrome_options.add_experimental_option("prefs", prefs)
-    driver = webdriver.Chrome("./chromedriver.exe")#,chrome_options=chrome_options)
+    driver = webdriver.Chrome("./chromedriver.exe",chrome_options=chrome_options)
     driver.get("https://www.sat24.com/history.aspx")
     
     
@@ -49,15 +50,15 @@ def task(year,month):
             retrive_button = driver.find_element(By.ID,"ctl00_maincontent_buttonRetrieve")
             retrive_button.click()
             print(driver.find_element(By.ID,"ctl00_maincontent_imageSat").get_attribute("src"))
-            #downloadImage(driver.find_element(By.ID,"ctl00_maincontent_imageSat").get_attribute("src"),str(year)+"_"+str(month)+"_"+str(str(i+1))+"_"+str(str(j)))
+            downloadImage(driver.find_element(By.ID,"ctl00_maincontent_imageSat").get_attribute("src"),str(year)+"_"+str(month)+"_"+str(str(i+1))+"_"+str(str(j)))
 
     #time.sleep(5)
 
     driver.close()
 
-
-for i in range(1):
-    thread = Thread(target=task,args=(2022,i+1))
-    thread.start()
-print('Waiting for the thread...')
-thread.join()
+for rok in range(2015,2022):
+    for i in range(12):
+        thread = Thread(target=task,args=(2022,i))
+        thread.start()
+    print('Waiting for the thread...')
+    thread.join()
