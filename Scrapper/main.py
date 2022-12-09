@@ -58,7 +58,7 @@ def task(year,month):
 
 for rok in range(2015,2022):
     for i in range(12):
-        thread = Thread(target=task,args=(2022,i))
+        thread = Thread(target=task,args=(rok,i))
         thread.start()
     print('Waiting for the thread...')
     thread.join()
