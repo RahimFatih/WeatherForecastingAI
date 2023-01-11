@@ -62,3 +62,4 @@ for rok in range(2015,2022):
         thread.start()
     print('Waiting for the thread...')
     thread.join()
+print("!!!!!!!!!!!!!!!!!!OLU MOŻESZ WYŁĄCZYĆ KOMPUTER!!!!!!!!!!!!!!!!")
