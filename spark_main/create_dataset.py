@@ -25,49 +25,46 @@ def procesing_images(rdf):
     return(rdf.image.origin,NW,SW,NE,SE)
 
     
-csv_grouping = spark.read.option("header", "true").csv("./dataGroupedByQuarters.csv")
+csv_grouping = spark.read.option("header", "true").csv("./dataGroupedByQuarters.csv").collect()
 df_images = spark.read.format("image").load("./Images")
 rdd = df_images.rdd
 yas = rdd.map(lambda f:procesing_images(f))
 
-i = 0
-for each in yas.collect():
-    i += 1
-    print(i)
-# j = 0
-# k = 1
-# for divided_img in yas.collect():
-#     print(k)
-#     for csv_data in csv_grouping.collect():
-#         date = datetime.fromordinal(datetime(1900, 1, 1).toordinal() + int(csv_data.Data) - 2).timetuple()
-#         date = str(date[0]) + '_' + str(date[1]) + '_' + str(date[2])
-#         if date in divided_img[0]:
-#             if csv_data.Cwiartka == "NW":
-#                 if float(csv_data.SrednieOpady) > 3:
-#                     divided_img[1].save("./results/1/" + str(i) + ".jpg")
-#                     i += 1
-#                 else:
-#                     divided_img[1].save("./results/0/" + str(j) + ".jpg")
-#                     j += 1
-#             elif csv_data.Cwiartka == "SW":
-#                 if float(csv_data.SrednieOpady) > 3:
-#                     divided_img[2].save("./results/1/" + str(i) + ".jpg")
-#                     i += 1
-#                 else:
-#                     divided_img[2].save("./results/0/" + str(j) + ".jpg")
-#                     j += 1
-#             elif csv_data.Cwiartka == "NE":
-#                 if float(csv_data.SrednieOpady) > 3:
-#                     divided_img[3].save("./results/1/" + str(i) + ".jpg")
-#                     i += 1 
-#                 else:
-#                     divided_img[3].save("./results/0/" + str(j) + ".jpg")
-#                     j += 1
-#             elif csv_data.Cwiartka == "SE":
-#                 if float(csv_data.SrednieOpady) > 3:
-#                     divided_img[4].save("./results/1/" + str(i) + ".jpg")
-#                     i += 1
-#                 else:
-#                     divided_img[4].save("./results/0/" + str(j) + ".jpg")
-#                     j += 1
-#     k += 1
+yas =  yas.collect()
+i=0
+j = 0
+k = 1
+for divided_img in yas:
+    for csv_data in csv_grouping:
+        date = datetime.fromordinal(datetime(1900, 1, 1).toordinal() + int(csv_data.Data) - 2).timetuple()
+        date = str(date[0]) + '_' + str(date[1]) + '_' + str(date[2])
+        if date in divided_img[0]:
+            if csv_data.Cwiartka == "NW":
+                if float(csv_data.SrednieOpady) > 3:
+                    divided_img[1].save("./results_testing/1/" + str(i) + ".jpg")
+                    i += 1
+                else:
+                    divided_img[1].save("./results_testing/0/" + str(j) + ".jpg")
+                    j += 1
+            elif csv_data.Cwiartka == "SW":
+                if float(csv_data.SrednieOpady) > 3:
+                    divided_img[2].save("./results_testing/1/" + str(i) + ".jpg")
+                    i += 1
+                else:
+                    divided_img[2].save("./results_testing/0/" + str(j) + ".jpg")
+                    j += 1
+            elif csv_data.Cwiartka == "NE":
+                if float(csv_data.SrednieOpady) > 3:
+                    divided_img[3].save("./results_testing/1/" + str(i) + ".jpg")
+                    i += 1 
+                else:
+                    divided_img[3].save("./results_testing/0/" + str(j) + ".jpg")
+                    j += 1
+            elif csv_data.Cwiartka == "SE":
+                if float(csv_data.SrednieOpady) > 3:
+                    divided_img[4].save("./results_testing/1/" + str(i) + ".jpg")
+                    i += 1
+                else:
+                    divided_img[4].save("./results_testing/0/" + str(j) + ".jpg")
+                    j += 1
+    k += 1
